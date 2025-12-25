@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaBrant Sales Intelligence Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background: #020617; }
+        .nav-btn.active { background: rgba(37, 99, 235, 0.2); border-color: rgba(59, 130, 246, 0.3); color: #93c5fd; }
+        .card { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.4); }
+        .kpi-emerald { background: linear-gradient(to bottom right, rgba(6, 78, 59, 0.4), rgba(6, 78, 59, 0.6)); border-color: rgba(4, 120, 87, 0.3); }
+        .kpi-blue { background: linear-gradient(to bottom right, rgba(30, 58, 138, 0.4), rgba(30, 58, 138, 0.6)); border-color: rgba(29, 78, 216, 0.3); }
+        .kpi-amber { background: linear-gradient(to bottom right, rgba(120, 53, 15, 0.4), rgba(120, 53, 15, 0.6)); border-color: rgba(180, 83, 9, 0.3); }
+        .kpi-purple { background: linear-gradient(to bottom right, rgba(88, 28, 135, 0.4), rgba(88, 28, 135, 0.6)); border-color: rgba(126, 34, 206, 0.3); }
+        .tier-emerald { background: rgba(6, 78, 59, 0.4); border-color: rgba(4, 120, 87, 0.3); }
+        .tier-amber { background: rgba(120, 53, 15, 0.4); border-color: rgba(180, 83, 9, 0.3); }
+        .tier-red { background: rgba(127, 29, 29, 0.4); border-color: rgba(153, 27, 27, 0.3); }
+        .cert-gradient { background: linear-gradient(to bottom right, rgba(30, 58, 138, 0.4), rgba(88, 28, 135, 0.4)); border-color: rgba(29, 78, 216, 0.3); }
+        .section { display: none; }
+        .section.active { display: block; }
+        .tab-btn { transition: all 0.2s; }
+        .tab-btn:hover { background: rgba(51, 65, 85, 0.5); color: white; }
+        .tab-btn.active { background: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3); }
+        .gc-card:hover { border-color: rgba(16, 185, 129, 0.3); }
+        .prospect-card:hover { border-color: rgba(59, 130, 246, 0.3); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700/50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg shadow-lg" style="box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);">L</div>
+                <div>
+                    <h1 class="text-xl font-bold text-white">LaBrant Sales Intelligence Hub</h1>
+                    <p class="text-xs text-slate-400">SE Wisconsin Commercial Painting Market</p>
+                </div>
+            </div>
+            <div class="flex gap-2" id="nav-tabs">
+                <button onclick="showSection('dashboard')" class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium bg-slate-800/50 text-slate-400" data-section="dashboard">
+                    <span class="mr-2">◉</span>Dashboard
+                </button>
+                <button onclick="showSection('targets')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800/50 text-slate-400" data-section="targets">
+                    <span class="mr-2">◎</span>Targets
+                </button>
+                <button onclick="showSection('gcs')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800/50 text-slate-400" data-section="gcs">
+                    <span class="mr-2">◇</span>GCs
+                </button>
+                <button onclick="showSection('pipeline')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800/50 text-slate-400" data-section="pipeline">
+                    <span class="mr-2">▣</span>Pipeline
+                </button>
+                <button onclick="showSection('calendar')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800/50 text-slate-400" data-section="calendar">
+                    <span class="mr-2">▦</span>Calendar
+                </button>
+                <button onclick="showSection('resources')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800/50 text-slate-400" data-section="resources">
+                    <span class="mr-2">▨</span>Resources
+                </button>
+                <button onclick="showSection('research')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800/50 text-slate-400" data-section="research">
+                    <span class="mr-2">📚</span>Research
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="p-6 max-w-7xl mx-auto">
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="section active space-y-6">
+            <!-- KPIs -->
+            <div class="grid grid-cols-4 gap-4">
+                <div class="kpi-emerald border rounded-xl p-5">
+                    <div class="text-emerald-400/70 text-xs font-medium uppercase tracking-wider">Revenue (Lifetime)</div>
+                    <div class="text-3xl font-bold text-emerald-300 mt-1">$16.3M</div>
+                    <div class="text-emerald-400/50 text-sm">126 jobs completed</div>
+                </div>
+                <div class="kpi-blue border rounded-xl p-5">
+                    <div class="text-blue-400/70 text-xs font-medium uppercase tracking-wider">Net Margin</div>
+                    <div class="text-3xl font-bold text-blue-300 mt-1">25.5%</div>
+                    <div class="text-blue-400/50 text-sm">$4.16M net income</div>
+                </div>
+                <div class="kpi-amber border rounded-xl p-5">
+                    <div class="text-amber-400/70 text-xs font-medium uppercase tracking-wider">Market Opportunity</div>
+                    <div class="text-3xl font-bold text-amber-300 mt-1">$50M+</div>
+                    <div class="text-amber-400/50 text-sm">Annual SE Wisconsin</div>
+                </div>
+                <div class="kpi-purple border rounded-xl p-5">
+                    <div class="text-purple-400/70 text-xs font-medium uppercase tracking-wider">Top 10 Targets</div>
+                    <div class="text-3xl font-bold text-purple-300 mt-1">$8M+</div>
+                    <div class="text-purple-400/50 text-sm">Pipeline potential</div>
+                </div>
+            </div>
+
+            <!-- Two Column -->
+            <div class="grid grid-cols-2 gap-6">
+                <!-- Weekly Tasks -->
+                <div class="card rounded-xl p-5">
+                    <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                        <span class="text-amber-400">◉</span> Weekly Cadence
+                    </h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/40 rounded-lg">
+                            <span class="text-xs font-medium text-slate-500 w-12">Mon</span>
+                            <span class="text-sm text-slate-300 flex-1">DemandStar & VendorNet bid review</span>
+                            <button class="px-3 py-1 text-xs bg-slate-700/50 hover:bg-emerald-600/30 text-slate-400 hover:text-emerald-300 rounded-full transition-colors">Done</button>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/40 rounded-lg">
+                            <span class="text-xs font-medium text-slate-500 w-12">Tue</span>
+                            <span class="text-sm text-slate-300 flex-1">Prospecting calls (2-hour block)</span>
+                            <button class="px-3 py-1 text-xs bg-slate-700/50 hover:bg-emerald-600/30 text-slate-400 hover:text-emerald-300 rounded-full transition-colors">Done</button>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/40 rounded-lg">
+                            <span class="text-xs font-medium text-slate-500 w-12">Wed</span>
+                            <span class="text-sm text-slate-300 flex-1">QuestCDN document review</span>
+                            <button class="px-3 py-1 text-xs bg-slate-700/50 hover:bg-emerald-600/30 text-slate-400 hover:text-emerald-300 rounded-full transition-colors">Done</button>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/40 rounded-lg">
+                            <span class="text-xs font-medium text-slate-500 w-12">Thu</span>
+                            <span class="text-sm text-slate-300 flex-1">GC relationship touches</span>
+                            <button class="px-3 py-1 text-xs bg-slate-700/50 hover:bg-emerald-600/30 text-slate-400 hover:text-emerald-300 rounded-full transition-colors">Done</button>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/40 rounded-lg">
+                            <span class="text-xs font-medium text-slate-500 w-12">Fri</span>
+                            <span class="text-sm text-slate-300 flex-1">Pipeline review & planning</span>
+                            <button class="px-3 py-1 text-xs bg-slate-700/50 hover:bg-emerald-600/30 text-slate-400 hover:text-emerald-300 rounded-full transition-colors">Done</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="cert-gradient border rounded-xl p-5">
+                    <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                        <span class="text-blue-400">✦</span> Competitive Advantages
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-3 bg-slate-900/50 rounded-lg">
+                            <div class="text-blue-300 text-xs font-medium">Milwaukee SBE + LBE</div>
+                            <div class="text-xl font-bold text-white">10% bid preference</div>
+                            <div class="text-slate-400 text-xs">Capped at $30K above low</div>
+                        </div>
+                        <div class="p-3 bg-slate-900/50 rounded-lg">
+                            <div class="text-blue-300 text-xs font-medium">SBE Participation</div>
+                            <div class="text-xl font-bold text-white">25% goal</div>
+                            <div class="text-slate-400 text-xs">Contracts >$25K</div>
+                        </div>
+                        <div class="p-3 bg-slate-900/50 rounded-lg">
+                            <div class="text-blue-300 text-xs font-medium">Milwaukee County TBE</div>
+                            <div class="text-xl font-bold text-white">25% construction</div>
+                            <div class="text-slate-400 text-xs">DBE reciprocity</div>
+                        </div>
+                        <div class="p-3 bg-slate-900/50 rounded-lg">
+                            <div class="text-blue-300 text-xs font-medium">WI DHS Lead Cert</div>
+                            <div class="text-xl font-bold text-white">Pre-1978 work</div>
+                            <div class="text-slate-400 text-xs">Most competitors lack</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top GCs -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                    <span class="text-emerald-400">★</span> Top GC Relationships by Revenue
+                </h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-medium text-slate-200">McShane Construction</span>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$2.0M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">42%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">12</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-medium text-slate-200">Fiduciary Real Estate</span>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.7M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">48%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">8</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-medium text-slate-200">Nicholas & Associates</span>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.6M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">34%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">14</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-medium text-slate-200">Cardinal Capital</span>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.5M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">35%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">6</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-medium text-slate-200">Greenfire Management</span>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.4M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">37%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">5</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-medium text-slate-200">MSP Real Estate</span>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.4M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">45%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">7</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TARGETS -->
+        <section id="targets" class="section space-y-6">
+            <div class="grid grid-cols-3 gap-4">
+                <div class="tier-emerald border rounded-xl p-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded text-xs font-medium">TIER 1</span>
+                        <span class="text-slate-400 text-xs">Pursue Aggressively</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-400 rounded-full"></span>City of Milwaukee contracts</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-400 rounded-full"></span>Milwaukee County facilities</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-400 rounded-full"></span>WHEDA-funded housing</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-400 rounded-full"></span>NCG Hospitality hotels</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-400 rounded-full"></span>Stevens Construction</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-400 rounded-full"></span>Greenfire subcontracting</li>
+                    </ul>
+                    <div class="mt-4 pt-4 border-t border-emerald-700/30 text-emerald-400/70 text-xs">$15M+ aggregate opportunity</div>
+                </div>
+                <div class="tier-amber border rounded-xl p-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded text-xs font-medium">TIER 2</span>
+                        <span class="text-slate-400 text-xs">Active Pursuit</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-amber-400 rounded-full"></span>Senior living / assisted living</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-amber-400 rounded-full"></span>Religious institutions (190+ parishes)</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-amber-400 rounded-full"></span>Private hospitality</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-amber-400 rounded-full"></span>Major retail (Scheels, Target)</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-amber-400 rounded-full"></span>VJS Construction projects</li>
+                        <li class="flex items-center gap-2"><span class="w-2 h-2 bg-amber-400 rounded-full"></span>Property management refresh</li>
+                    </ul>
+                    <div class="mt-4 pt-4 border-t border-amber-700/30 text-amber-400/70 text-xs">$20M+ aggregate opportunity</div>
+                </div>
+                <div class="tier-red border rounded-xl p-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-0.5 bg-red-500/20 text-red-300 rounded text-xs font-medium">AVOID</span>
+                        <span class="text-slate-400 text-xs">Union-Dominated</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-slate-500 opacity-70">
+                        <li class="flex items-center gap-2 line-through"><span class="w-2 h-2 bg-red-400 rounded-full"></span>Public K-12 schools</li>
+                        <li class="flex items-center gap-2 line-through"><span class="w-2 h-2 bg-red-400 rounded-full"></span>UW System projects</li>
+                        <li class="flex items-center gap-2 line-through"><span class="w-2 h-2 bg-red-400 rounded-full"></span>Major hospital systems</li>
+                        <li class="flex items-center gap-2 line-through"><span class="w-2 h-2 bg-red-400 rounded-full"></span>Data centers ($25B investment)</li>
+                        <li class="flex items-center gap-2 line-through"><span class="w-2 h-2 bg-red-400 rounded-full"></span>Convention/performing arts</li>
+                        <li class="flex items-center gap-2 line-through"><span class="w-2 h-2 bg-red-400 rounded-full"></span>Fire hydrant painting</li>
+                    </ul>
+                    <div class="mt-4 pt-4 border-t border-red-700/30 text-red-400/70 text-xs">100% union PLAs - No opportunity</div>
+                </div>
+            </div>
+
+            <!-- Top 10 Table -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Top 10 High-Priority Targets</h3>
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-xs text-slate-400 uppercase tracking-wider border-b border-slate-700/50">
+                            <th class="pb-3 pr-4">#</th>
+                            <th class="pb-3 pr-4">Opportunity</th>
+                            <th class="pb-3 pr-4">Est. Value</th>
+                            <th class="pb-3 pr-4">Timeline</th>
+                            <th class="pb-3 pr-4">Contact</th>
+                            <th class="pb-3">Cert Advantage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">1</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">MPS Phase 2 Cosmetic Painting</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$5-15M</td>
+                            <td class="py-3 pr-4 text-slate-400">Spring 2026</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">MPS Procurement</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">Lead cert + SBE</span></td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">2</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">Stevens Construction Subcontracting</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$500K+/yr</td>
+                            <td class="py-3 pr-4 text-slate-400">Ongoing</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">(414) 828-5100</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">DBE/SBE participation</span></td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">3</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">Greenfire Management Subcontracting</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$500K+/yr</td>
+                            <td class="py-3 pr-4 text-slate-400">Ongoing</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">(414) 290-9400</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">DBE goals (minority GC)</span></td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">4</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">NCG Moxy Milwaukee</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$200K+</td>
+                            <td class="py-3 pr-4 text-slate-400">Summer 2026</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">ncghospitality.com</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">25% DBE + 40% RPP</span></td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">5</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">Barrett Lo Mayfair Apartments</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$300K+</td>
+                            <td class="py-3 pr-4 text-slate-400">Mid-2025 start</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">barrettlo.com</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">25% DBE requirement</span></td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-amber-500/20 text-amber-300">6</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">Scheels Mayfair</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$400K+</td>
+                            <td class="py-3 pr-4 text-slate-400">2026-2027</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">Sampson Construction</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">Subcontractor relationship</span></td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300">7</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">Milwaukee County Facilities</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$100K+/yr</td>
+                            <td class="py-3 pr-4 text-slate-400">Ongoing</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">Sean Hayes (414) 278-4940</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">25% TBE goal</span></td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-amber-500/20 text-amber-300">8</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">Archdiocese of Milwaukee</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$100K+/yr</td>
+                            <td class="py-3 pr-4 text-slate-400">Summer 2026</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">Steve Jupp (414) 769-3566</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">Lead cert for pre-1978</span></td>
+                        </tr>
+                        <tr class="border-b border-slate-800/50 hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-amber-500/20 text-amber-300">9</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">The Scion Group Turnovers</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$50K+/yr</td>
+                            <td class="py-3 pr-4 text-slate-400">May-August</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">(414) 344-2040</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">Lead cert, annual cycle</span></td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="py-3 pr-4"><span class="w-6 h-6 inline-flex items-center justify-center rounded-full text-xs font-bold bg-amber-500/20 text-amber-300">10</span></td>
+                            <td class="py-3 pr-4 font-medium text-slate-200">VJS Senior Living Projects</td>
+                            <td class="py-3 pr-4 text-emerald-400 font-medium">$200K+/yr</td>
+                            <td class="py-3 pr-4 text-slate-400">Ongoing</td>
+                            <td class="py-3 pr-4 text-blue-400 text-sm">vjscs.com</td>
+                            <td class="py-3"><span class="text-xs px-2 py-1 bg-blue-500/10 text-blue-300 rounded">Merit-shop GC</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- GCs -->
+        <section id="gcs" class="section space-y-6">
+            <!-- Active -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                    <span class="w-3 h-3 bg-emerald-400 rounded-full"></span> Active Relationships
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-3">
+                            <div><div class="font-semibold text-slate-200">McShane Construction</div><div class="text-sm text-slate-400">(312) 266-4200</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$2.0M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">42%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">12</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-3">
+                            <div><div class="font-semibold text-slate-200">Fiduciary Real Estate</div><div class="text-sm text-slate-400">(414) 291-9500</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.7M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">48%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">8</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-3">
+                            <div><div class="font-semibold text-slate-200">Nicholas & Associates</div><div class="text-sm text-slate-400">(262) 783-6560</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.6M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">34%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">14</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-3">
+                            <div><div class="font-semibold text-slate-200">Cardinal Capital</div><div class="text-sm text-slate-400">(414) 727-5800</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.5M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">35%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">6</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-3">
+                            <div><div class="font-semibold text-slate-200">Greenfire Management</div><div class="text-sm text-slate-400">(414) 290-9400</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.4M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">37%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">5</div></div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 gc-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-3">
+                            <div><div class="font-semibold text-slate-200">MSP Real Estate</div><div class="text-sm text-slate-400">(414) 276-5800</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full">Active</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div><div class="text-slate-500 text-xs">Revenue</div><div class="text-slate-200 font-semibold">$1.4M</div></div>
+                            <div><div class="text-slate-500 text-xs">Margin</div><div class="text-emerald-400 font-semibold">45%</div></div>
+                            <div><div class="text-slate-500 text-xs">Jobs</div><div class="text-slate-200 font-semibold">7</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prospects -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                    <span class="w-3 h-3 bg-blue-400 rounded-full"></span> Priority Prospects (Merit-Shop)
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 prospect-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-2">
+                            <div><div class="font-semibold text-slate-200">Stevens Construction</div><div class="text-sm text-blue-400">(414) 828-5100</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-full">Prospect</span>
+                        </div>
+                        <div class="text-sm text-slate-400">Annual volume: $300M+</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 prospect-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-2">
+                            <div><div class="font-semibold text-slate-200">VJS Construction</div><div class="text-sm text-blue-400">vjscs.com</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-full">Prospect</span>
+                        </div>
+                        <div class="text-sm text-slate-400">Annual volume: $272M</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 prospect-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-2">
+                            <div><div class="font-semibold text-slate-200">Moore Construction</div><div class="text-sm text-blue-400">moore-cs.com</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-full">Prospect</span>
+                        </div>
+                        <div class="text-sm text-slate-400">Annual volume: $150M</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg border border-slate-700/30 prospect-card transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-2">
+                            <div><div class="font-semibold text-slate-200">Catalyst Construction</div><div class="text-sm text-blue-400">catalystbuilds.com</div></div>
+                            <span class="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-full">Prospect</span>
+                        </div>
+                        <div class="text-sm text-slate-400">Barrett Lo GC - 25% DBE</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avoid -->
+            <div class="tier-red border rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                    <span class="text-red-400">⊘</span> Union GCs to Avoid
+                </h3>
+                <div class="grid grid-cols-4 gap-3">
+                    <div class="p-3 bg-slate-900/50 rounded-lg opacity-60">
+                        <div class="font-medium text-slate-400">JP Cullen</div>
+                        <div class="text-xs text-red-400">Union since 1904</div>
+                        <div class="text-xs text-slate-500">$850M+</div>
+                    </div>
+                    <div class="p-3 bg-slate-900/50 rounded-lg opacity-60">
+                        <div class="font-medium text-slate-400">Miron Construction</div>
+                        <div class="text-xs text-red-400">138 union apprentices</div>
+                        <div class="text-xs text-slate-500">$500M+</div>
+                    </div>
+                    <div class="p-3 bg-slate-900/50 rounded-lg opacity-60">
+                        <div class="font-medium text-slate-400">Hunzinger</div>
+                        <div class="text-xs text-red-400">Union-signatory</div>
+                        <div class="text-xs text-slate-500">$200M+</div>
+                    </div>
+                    <div class="p-3 bg-slate-900/50 rounded-lg opacity-60">
+                        <div class="font-medium text-slate-400">The Boldt Company</div>
+                        <div class="text-xs text-red-400">Confirmed union</div>
+                        <div class="text-xs text-slate-500">$500M+</div>
+                    </div>
+                    <div class="p-3 bg-slate-900/50 rounded-lg opacity-60">
+                        <div class="font-medium text-slate-400">C.D. Smith</div>
+                        <div class="text-xs text-red-400">Union-signatory</div>
+                        <div class="text-xs text-slate-500">$400M+</div>
+                    </div>
+                    <div class="p-3 bg-slate-900/50 rounded-lg opacity-60">
+                        <div class="font-medium text-slate-400">J.H. Findorff</div>
+                        <div class="text-xs text-red-400">Union-signatory</div>
+                        <div class="text-xs text-slate-500">$300M+</div>
+                    </div>
+                    <div class="p-3 bg-slate-900/50 rounded-lg opacity-60">
+                        <div class="font-medium text-slate-400">CG Schmidt</div>
+                        <div class="text-xs text-red-400">Lost $58K on Horlick</div>
+                        <div class="text-xs text-slate-500">$200M+</div>
+                    </div>
+                    <div class="p-3 bg-slate-900/50 rounded-lg opacity-60">
+                        <div class="font-medium text-slate-400">Scherrer Construction</div>
+                        <div class="text-xs text-red-400">Public school work</div>
+                        <div class="text-xs text-slate-500">Regional</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PIPELINE -->
+        <section id="pipeline" class="section space-y-6">
+            <!-- Stages -->
+            <div class="grid grid-cols-5 gap-4">
+                <div class="card rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-slate-300">Prospect</h4>
+                        <span class="text-xs text-slate-500">12</span>
+                    </div>
+                    <div class="text-2xl font-bold text-slate-200">$1.2M</div>
+                    <div class="mt-3 h-1 bg-slate-700 rounded-full"><div class="h-1 bg-slate-500 rounded-full" style="width: 60%"></div></div>
+                </div>
+                <div class="card rounded-xl p-4" style="border-color: rgba(59, 130, 246, 0.3);">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-blue-300">Qualified</h4>
+                        <span class="text-xs text-slate-500">8</span>
+                    </div>
+                    <div class="text-2xl font-bold text-slate-200">$890K</div>
+                    <div class="mt-3 h-1 bg-slate-700 rounded-full"><div class="h-1 bg-blue-500 rounded-full" style="width: 45%"></div></div>
+                </div>
+                <div class="card rounded-xl p-4" style="border-color: rgba(245, 158, 11, 0.3);">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-amber-300">Proposal</h4>
+                        <span class="text-xs text-slate-500">5</span>
+                    </div>
+                    <div class="text-2xl font-bold text-slate-200">$620K</div>
+                    <div class="mt-3 h-1 bg-slate-700 rounded-full"><div class="h-1 bg-amber-500 rounded-full" style="width: 30%"></div></div>
+                </div>
+                <div class="card rounded-xl p-4" style="border-color: rgba(168, 85, 247, 0.3);">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-purple-300">Negotiation</h4>
+                        <span class="text-xs text-slate-500">3</span>
+                    </div>
+                    <div class="text-2xl font-bold text-slate-200">$340K</div>
+                    <div class="mt-3 h-1 bg-slate-700 rounded-full"><div class="h-1 bg-purple-500 rounded-full" style="width: 20%"></div></div>
+                </div>
+                <div class="card rounded-xl p-4" style="border-color: rgba(16, 185, 129, 0.3);">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-medium text-emerald-300">Won</h4>
+                        <span class="text-xs text-slate-500">2</span>
+                    </div>
+                    <div class="text-2xl font-bold text-slate-200">$180K</div>
+                    <div class="mt-3 h-1 bg-slate-700 rounded-full"><div class="h-1 bg-emerald-500 rounded-full" style="width: 100%"></div></div>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Monthly KPI Targets</h3>
+                <div class="grid grid-cols-5 gap-4">
+                    <div class="p-4 bg-slate-800/40 rounded-lg text-center">
+                        <div class="text-slate-400 text-xs mb-2">New Contacts</div>
+                        <div class="text-2xl font-bold text-slate-200">12</div>
+                        <div class="text-xs text-slate-500">Target: 20+</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg text-center">
+                        <div class="text-slate-400 text-xs mb-2">Outreach Activities</div>
+                        <div class="text-2xl font-bold text-slate-200">67</div>
+                        <div class="text-xs text-slate-500">Target: 100+</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg text-center">
+                        <div class="text-slate-400 text-xs mb-2">Qualified Opps</div>
+                        <div class="text-2xl font-bold text-slate-200">3</div>
+                        <div class="text-xs text-slate-500">Target: 5+</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg text-center">
+                        <div class="text-slate-400 text-xs mb-2">Proposals</div>
+                        <div class="text-2xl font-bold text-slate-200">2</div>
+                        <div class="text-xs text-slate-500">Target: 3+</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg text-center">
+                        <div class="text-slate-400 text-xs mb-2">GC Relations</div>
+                        <div class="text-2xl font-bold text-slate-200">1</div>
+                        <div class="text-xs text-slate-500">Target: 2+</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bid Platforms -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Bid Monitoring Platforms</h3>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="p-4 bg-slate-800/40 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="font-semibold text-slate-200">VendorNet</div>
+                            <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                        </div>
+                        <div class="text-sm text-blue-400 mb-1">eSupplier.wi.gov</div>
+                        <div class="text-xs text-slate-400">Daily (auto alerts)</div>
+                        <div class="text-xs text-slate-500">Codes: 910-54, 914-61</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="font-semibold text-slate-200">DemandStar</div>
+                            <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                        </div>
+                        <div class="text-sm text-blue-400 mb-1">demandstar.com</div>
+                        <div class="text-xs text-slate-400">Mon, Wed</div>
+                        <div class="text-xs text-slate-500">Painting keywords</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="font-semibold text-slate-200">QuestCDN</div>
+                            <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                        </div>
+                        <div class="text-sm text-blue-400 mb-1">questcdn.com</div>
+                        <div class="text-xs text-slate-400">Wednesday</div>
+                        <div class="text-xs text-slate-500">Construction docs</div>
+                    </div>
+                    <div class="p-4 bg-slate-800/40 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="font-semibold text-slate-200">Bonfire</div>
+                            <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                        </div>
+                        <div class="text-sm text-blue-400 mb-1">gobonfire.com</div>
+                        <div class="text-xs text-slate-400">Daily (auto alerts)</div>
+                        <div class="text-xs text-slate-500">Painting, coating</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALENDAR -->
+        <section id="calendar" class="section space-y-6">
+            <!-- Seasonal -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Annual Seasonality</h3>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="p-4 rounded-lg" style="background: rgba(30, 58, 138, 0.3); border: 1px solid rgba(29, 78, 216, 0.3);">
+                        <div class="text-blue-300 font-medium mb-2">Q1: Setup</div>
+                        <ul class="text-sm text-slate-400 space-y-1">
+                            <li>• Platform registrations</li>
+                            <li>• Prequalification submissions</li>
+                            <li>• GC relationship building</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-lg" style="background: rgba(6, 78, 59, 0.3); border: 1px solid rgba(4, 120, 87, 0.3);">
+                        <div class="text-emerald-300 font-medium mb-2">Q2: Bidding Peak</div>
+                        <ul class="text-sm text-slate-400 space-y-1">
+                            <li>• School summer painting bids</li>
+                            <li>• Water tower RFPs</li>
+                            <li>• Student housing turnovers</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-lg" style="background: rgba(120, 53, 15, 0.3); border: 1px solid rgba(180, 83, 9, 0.3);">
+                        <div class="text-amber-300 font-medium mb-2">Q3: Execution</div>
+                        <ul class="text-sm text-slate-400 space-y-1">
+                            <li>• Exterior painting season</li>
+                            <li>• School project execution</li>
+                            <li>• Student housing work</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-lg" style="background: rgba(88, 28, 135, 0.3); border: 1px solid rgba(126, 34, 206, 0.3);">
+                        <div class="text-purple-300 font-medium mb-2">Q4: Planning</div>
+                        <ul class="text-sm text-slate-400 space-y-1">
+                            <li>• Municipal budget cycles</li>
+                            <li>• Relationship maintenance</li>
+                            <li>• Next year positioning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Dates -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Key 2026 Dates</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-red-500/20 text-red-300 rounded text-xs font-medium">Jan 1</span>
+                        <span class="text-slate-300">Brookfield Prequalification Deadline</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-red-500/20 text-red-300 rounded text-xs font-medium">Jan 3</span>
+                        <span class="text-slate-300">Complete platform registrations</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 rounded text-xs font-medium">Jan 10</span>
+                        <span class="text-slate-300">GC outreach complete</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 rounded text-xs font-medium">Jan 17</span>
+                        <span class="text-slate-300">Prequalification submissions</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded text-xs font-medium">Feb 2026</span>
+                        <span class="text-slate-300">ABC Wisconsin SuperCon</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-red-500/20 text-red-300 rounded text-xs font-medium">Mar 15</span>
+                        <span class="text-slate-300">Lake Geneva Prequalification Deadline</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded text-xs font-medium">Spring 2026</span>
+                        <span class="text-slate-300">MPS Phase 2 Cosmetic Painting Expected</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded text-xs font-medium">May-Aug</span>
+                        <span class="text-slate-300">Student Housing Turnovers (Scion Group)</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-slate-800/40 rounded-lg">
+                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded text-xs font-medium">Spring 2027</span>
+                        <span class="text-slate-300">Scheels Mayfair Opening</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESOURCES -->
+        <section id="resources" class="section space-y-6">
+            <div class="grid grid-cols-3 gap-6">
+                <div class="card rounded-xl p-5">
+                    <h3 class="font-semibold text-slate-200 mb-4">Capability Statements</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-blue-400">📄</span><span class="text-slate-300 text-sm">Base Document (1-page)</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-blue-400">📄</span><span class="text-slate-300 text-sm">Municipal Insert</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-blue-400">📄</span><span class="text-slate-300 text-sm">GC Subcontractor Insert</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-blue-400">📄</span><span class="text-slate-300 text-sm">Religious/Institutional Insert</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-blue-400">📄</span><span class="text-slate-300 text-sm">Senior Living Insert</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded-xl p-5">
+                    <h3 class="font-semibold text-slate-200 mb-4">Outreach Templates</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-emerald-400">✉️</span><span class="text-slate-300 text-sm">GC Introduction Email</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-emerald-400">✉️</span><span class="text-slate-300 text-sm">Municipal Follow-Up</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-emerald-400">✉️</span><span class="text-slate-300 text-sm">Owner Direct Pitch</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-emerald-400">✉️</span><span class="text-slate-300 text-sm">Reference Request</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-emerald-400">✉️</span><span class="text-slate-300 text-sm">Bid Submission Cover</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded-xl p-5">
+                    <h3 class="font-semibold text-slate-200 mb-4">Certification Docs</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-amber-400">🏆</span><span class="text-slate-300 text-sm">WisDOT DBE Certificate</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-amber-400">🏆</span><span class="text-slate-300 text-sm">City of Milwaukee SBE</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-amber-400">🏆</span><span class="text-slate-300 text-sm">Milwaukee County TBE</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-amber-400">🏆</span><span class="text-slate-300 text-sm">WI DHS Lead Cert</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-slate-800/50 rounded-lg cursor-pointer">
+                            <span class="text-amber-400">🏆</span><span class="text-slate-300 text-sm">Insurance Certificate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- External Links -->
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">External Platforms</h3>
+                <div class="grid grid-cols-4 gap-4">
+                    <a href="https://esupplier.wi.gov" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors text-center">
+                        <div class="text-slate-200 font-medium">VendorNet</div>
+                        <div class="text-xs text-blue-400">eSupplier.wi.gov</div>
+                    </a>
+                    <a href="https://demandstar.com" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors text-center">
+                        <div class="text-slate-200 font-medium">DemandStar</div>
+                        <div class="text-xs text-blue-400">demandstar.com</div>
+                    </a>
+                    <a href="https://questcdn.com" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors text-center">
+                        <div class="text-slate-200 font-medium">QuestCDN</div>
+                        <div class="text-xs text-blue-400">questcdn.com</div>
+                    </a>
+                    <a href="https://gobonfire.com" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors text-center">
+                        <div class="text-slate-200 font-medium">Bonfire</div>
+                        <div class="text-xs text-blue-400">gobonfire.com</div>
+                    </a>
+                    <a href="https://abcwi.org" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors text-center">
+                        <div class="text-slate-200 font-medium">ABC Wisconsin</div>
+                        <div class="text-xs text-blue-400">abcwi.org</div>
+                    </a>
+                    <a href="https://biztimes.com" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors text-center">
+                        <div class="text-slate-200 font-medium">BizTimes</div>
+                        <div class="text-xs text-blue-400">biztimes.com</div>
+                    </a>
+                    <a href="https://dailyreporter.com" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors text-center">
+                        <div class="text-slate-200 font-medium">Daily Reporter</div>
+                        <div class="text-xs text-blue-400">dailyreporter.com</div>
+                    </a>
+                    <a href="https://bizjournals.com/milwaukee" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors text-center">
+                        <div class="text-slate-200 font-medium">MBJ</div>
+                        <div class="text-xs text-blue-400">bizjournals.com/milwaukee</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Playbooks -->
+            <div class="grid grid-cols-2 gap-6">
+                <div class="card rounded-xl p-5 hover:border-blue-500/30 transition-colors cursor-pointer">
+                    <h4 class="font-semibold text-slate-200 mb-2">GC Subcontractor Positioning</h4>
+                    <p class="text-slate-400 text-sm mb-3">How to position for merit-shop GC relationships</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs">1</span>
+                            <span class="text-slate-300">Register as subcontractor</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs">2</span>
+                            <span class="text-slate-300">Attend bid walks</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs">3</span>
+                            <span class="text-slate-300">Submit capability statement</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs">4</span>
+                            <span class="text-slate-300">Follow up monthly</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded-xl p-5 hover:border-blue-500/30 transition-colors cursor-pointer">
+                    <h4 class="font-semibold text-slate-200 mb-2">Certification Value Pitch</h4>
+                    <p class="text-slate-400 text-sm mb-3">Articulating your competitive advantage</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs">1</span>
+                            <span class="text-slate-300">10% bid preference on Milwaukee contracts</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs">2</span>
+                            <span class="text-slate-300">25% participation goals (SBE/TBE)</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs">3</span>
+                            <span class="text-slate-300">Help primes meet DBE goals</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs">4</span>
+                            <span class="text-slate-300">Pre-1978 lead cert advantage</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESEARCH -->
+        <section id="research" class="section space-y-6">
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Strategy Documents</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/strategy-master-plan/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Master Strategy Plan</div>
+                        <div class="text-xs text-slate-400">Year 1-5 boardroom strategy, 90-day sprint</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/strategy-profitability/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Job Profitability Analysis</div>
+                        <div class="text-xs text-slate-400">QuickBooks P&L data — which GCs make money</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/strategy-gc-pipeline/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">GC Pipeline Intelligence</div>
+                        <div class="text-xs text-slate-400">$4.5-7.7M pipeline, tier rankings</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/strategy-competitor-intel/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Competitor Intelligence</div>
+                        <div class="text-xs text-slate-400">Suburban Drywall analysis, 50+ GC contacts</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Market Research</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/research-overview/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">SE Wisconsin Market Intel</div>
+                        <div class="text-xs text-slate-400">Comprehensive overview</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/research-part1-municipal/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Part 1: Municipal</div>
+                        <div class="text-xs text-slate-400">100-mile radius contracts</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/research-part2-gc/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Part 2: GC Landscape</div>
+                        <div class="text-xs text-slate-400">Merit-shop vs union GCs</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/research-part3-developers/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Part 3: Developers</div>
+                        <div class="text-xs text-slate-400">WHEDA, RPP requirements</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/research-part6-1-maintenance/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Part 6.1: Facility Maint</div>
+                        <div class="text-xs text-slate-400">Zoo, Stadium, State Fair</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/research-part6-2-large-facilities/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Part 6.2: Large Property</div>
+                        <div class="text-xs text-slate-400">US Bank, Airport, MMSD</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Market Segments</h3>
+                <div class="grid grid-cols-4 gap-4">
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/market-transit-fleet/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Transit & Fleet</div>
+                        <div class="text-xs text-slate-400">MCTS, school bus yards</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/market-food-beverage/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Food & Cold Storage</div>
+                        <div class="text-xs text-slate-400">Breweries, food processing</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/market-religious/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Religious Institutions</div>
+                        <div class="text-xs text-slate-400">Archdiocese, 190+ parishes</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/market-private-schools/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Private Schools</div>
+                        <div class="text-xs text-slate-400">K-12 private and parochial</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card rounded-xl p-5">
+                <h3 class="font-semibold text-slate-200 mb-4">Appendices</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/appendix-senior-living-1/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Senior Living (1/2)</div>
+                        <div class="text-xs text-slate-400">Operator profiles and contacts</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/appendix-water-towers/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Water Towers</div>
+                        <div class="text-xs text-slate-400">SE Wisconsin inventory</div>
+                    </a>
+                    <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/quick-reference/" target="_blank" class="p-3 bg-slate-800/40 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <div class="text-slate-200 font-medium">Quick Reference</div>
+                        <div class="text-xs text-slate-400">One-page printable summary</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center py-4">
+                <a href="https://labrant-associates-llc.github.io/labrant-sales-strategy/" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg transition-colors">
+                    View Full Research Library →
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/50 px-6 py-4 mt-8">
+        <div class="max-w-7xl mx-auto flex items-center justify-between text-sm text-slate-500">
+            <span>LaBrant & Associates LLC | Sales Intelligence Hub</span>
+            <span>Research compiled December 2025 | 300+ sources</span>
+        </div>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            // Update tab styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.section === sectionId) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
